@@ -5,8 +5,8 @@ import matplotlib.pyplot as plt
 # 给出城市数据
 # x[i],y[i]表示第i个城市的x,y坐标
 # C=np.array([[1,2],[70,90],[80,60],[10,100],[800,200],[800,100],[90,80],[200,600],[230,4],[500,90]])
-x = [1,70,80,10,800,800,90,200,230,500]
-y = [2,90,60,100,200,100,80,600,4,90]
+x = [1,70,80,10 ,800,800,90,200,230,500]
+y = [2,90,60,100,200,100,80,600,4  ,90 ]
 
 # 参数 城市数量 蚂蚁数量 
 # 信息素变化参数
@@ -32,12 +32,12 @@ t=np.ones((n,n))
 
 # 初始化路径矩阵
 # routes[i,j]表示第i只蚂蚁在第j步爬到了第routes[i,j]个城市
-routes = np.zeros((m,n))
+routes = np.random.randint(0,10,(n,n))
 
-t = 0
+time = 0
 # 100次循环
-while t < 100:
-    t += 1
+while time < 10:
+    time += 1
     # 第i只蚂蚁
     for i in range(m):
         # 第一个城市是随机选择的
@@ -45,9 +45,44 @@ while t < 100:
         routes[i,0] = city
         visited = [city]
         # 第二个城市开始是按信息素选取的
-        for j in range(2,n):
+        for j in range(1,n):
+            # 当前所在城市
+            current = visited[j-1]
+            probability = []
+            for k in range(n):
+                p = 0.0
+                # 如果k城市没有被访问过，计算概率。否则概率为零
+                if k not in visited:
+                    p = np.power(e[current,k], beta)*np.power(t[current,k], alpha)
+                probability.append(p)
+            
+            # 归一化
+            numerator = sum(probability)
+            for k in range(n):
+                probability[k] /= numerator
+            
+            # 随机选择一个城市
+            rand = np.random.rand()
+            sump = 0.0
+            for k in range(n):
+                sump += probability[k]
+                if sump > rand:
+                    city = k
+                    visited.append(city)
+                    routes[i,j] = city
+                    break
+            
+        # 一只蚂蚁爬完之后开始更新信息素
+        print(sum(probability))
 
 
+xx,yy=[],[]
+for i in range(n):
+    xx.append(x[routes[2,i]])
+    yy.append(y[routes[2,i]])
+
+plt.plot(xx,yy,color='black')
+plt.show()
 
     
 
