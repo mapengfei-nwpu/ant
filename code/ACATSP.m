@@ -29,7 +29,7 @@ for i=1:n
 end
 
 Eta=1./D;          %Eta为启发因子，这里设为距离的倒数
-Tau=ones(n,n);     %Tau为信息素矩阵
+Tau=8*ones(n,n);     %Tau为信息素矩阵
 
 Tabu=zeros(m,n);   %存储并记录路径的生成
 NC=1;               %迭代计数器，记录迭代次数
@@ -87,7 +87,7 @@ while NC<=NC_max        %停止条件之一：达到最大迭代次数，停止
     pos=find(L==L_best(NC));
     R_best(NC,:)=Tabu(pos(1),:); %此轮迭代后的最佳路线
     L_ave(NC)=mean(L);           %此轮迭代后的平均距离
-    NC=NC+1                      %迭代继续
+    NC=NC+1;                      %迭代继续
     
     %%第五步：更新信息素
     Delta_Tau=zeros(n,n);        %开始时信息素为n*n的0矩阵
@@ -107,10 +107,10 @@ end
 Pos=find(L_best==min(L_best)); %找到最佳路径（非0为真）
 Shortest_Route=R_best(Pos(1),:); %最大迭代次数后最佳路径
 Shortest_Length=L_best(Pos(1)); %最大迭代次数后最短距离
-subplot(1,2,1)                  %绘制第一个子图形
-DrawRoute(C,Shortest_Route)     %画路线图的子函数
-subplot(1,2,2)                  %绘制第二个子图形
-plot(L_best)
-hold on                         %保持图形
-plot(L_ave,'r')
-title('平均距离和最短距离')     %标题
+% subplot(1,2,1)                  %绘制第一个子图形
+% DrawRoute(C,Shortest_Route)     %画路线图的子函数
+% subplot(1,2,2)                  %绘制第二个子图形
+% plot(L_best)
+% hold on                         %保持图形
+% plot(L_ave,'r')
+% title('平均距离和最短距离')     %标题
